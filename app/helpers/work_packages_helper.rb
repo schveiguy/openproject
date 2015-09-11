@@ -588,7 +588,7 @@ module WorkPackagesHelper
     start_date_field = work_package_form_field {
       field = form.text_field :start_date,
                               size: 10,
-                              disabled: attrib_disabled?(work_package, 'start_date'),
+                              disabled: attrib_disabled?(work_package, 'start_date') || work_package.soonest_start,
                               class: 'short'
       field += calendar_for("#{form.object_name}_start_date") unless attrib_disabled?(work_package, 'start_date')
 

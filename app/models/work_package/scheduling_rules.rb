@@ -37,7 +37,7 @@ module WorkPackage::SchedulingRules
   def reschedule_after(date)
     return if date.nil?
     if leaf?
-      if start_date.nil? || start_date < date
+      if start_date.nil? || start_date != date
         self.start_date, self.due_date = date, date + duration - 1
         save
       end

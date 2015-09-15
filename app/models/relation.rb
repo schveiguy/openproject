@@ -103,7 +103,11 @@ class Relation < ActiveRecord::Base
   def set_dates_of_target
     soonest_start = successor_soonest_start
     if soonest_start && to
-      to.reschedule_after(to.soonest_start)
+      prev_soonest_start = to.soonest_start_uncached
+      if prev_soonest_start && soonest_start < prev_soonest_start
+        soonest_start = prev_soonest_start
+      end
+      to.reschedule_after(soonest_start)
     end
   end
 

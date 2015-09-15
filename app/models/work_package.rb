@@ -379,12 +379,16 @@ class WorkPackage < ActiveRecord::Base
     relations_to.select { |r| r.relation_type == Relation::TYPE_DUPLICATES }.map(&:from)
   end
 
-  def soonest_start
-    @soonest_start ||= (
+  def soonest_start_uncached
+    @soonest_start = (
       self_and_ancestors.map(&:relations_to)
                         .flatten
                         .map(&:successor_soonest_start)
     ).compact.max
+  end
+
+  def soonest_start
+    @soonest_start || soonest_start_uncached
   end
 
   # Updates start/due dates of following issues

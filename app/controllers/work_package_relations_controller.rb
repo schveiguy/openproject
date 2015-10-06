@@ -53,6 +53,9 @@ class WorkPackageRelationsController < ApplicationController
 
     @relation.destroy
 
+    needs_reschedule = @relation.relation_type == Relation::TYPE_PRECEDES ? WorkPackage.find(@relation.to_id) : nil
+    needs_reschedule.reschedule_after(needs_reschedule.soonest_start) if needs_reschedule
+
     respond_to do |format|
       format.html { redirect_to work_package_path(@work_package) }
       format.js {}
